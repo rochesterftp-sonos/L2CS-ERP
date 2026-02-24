@@ -64,3 +64,14 @@ export const cmmcColors: Record<string, string> = {
   audit_ready: "bg-amber-100 text-amber-700",
   certified: "bg-emerald-100 text-emerald-700",
 };
+
+export const invoiceStatusColors: Record<string, string> = {
+  paid: "bg-emerald-100 text-emerald-800",
+  open: "bg-blue-100 text-blue-800",
+  overdue: "bg-red-100 text-red-800",
+};
+
+export function formatCurrency(amount: number | null | undefined): string {
+  if (amount == null) return "$0.00";
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+}

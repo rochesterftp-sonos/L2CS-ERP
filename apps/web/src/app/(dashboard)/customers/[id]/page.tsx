@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ExternalLink, Mail, Shield, Clock, FileText, MessageSquare, StickyNote, Save } from "lucide-react";
+import { ArrowLeft, ExternalLink, Mail, Shield, Clock, FileText, MessageSquare, StickyNote, Save, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +18,7 @@ import {
   formatDateTime,
   timeAgo,
 } from "@/lib/utils";
+import BillingTab from "@/components/billing-tab";
 
 interface Customer {
   id: string;
@@ -196,6 +197,7 @@ export default function Customer360Page({ params }: { params: Promise<{ id: stri
           <TabsTrigger value="timeline"><Clock className="mr-1.5 h-3.5 w-3.5" /> Timeline</TabsTrigger>
           <TabsTrigger value="email"><Mail className="mr-1.5 h-3.5 w-3.5" /> Email</TabsTrigger>
           <TabsTrigger value="support"><MessageSquare className="mr-1.5 h-3.5 w-3.5" /> Support</TabsTrigger>
+          <TabsTrigger value="billing"><DollarSign className="mr-1.5 h-3.5 w-3.5" /> Billing</TabsTrigger>
           <TabsTrigger value="files"><FileText className="mr-1.5 h-3.5 w-3.5" /> Files</TabsTrigger>
           <TabsTrigger value="compliance"><Shield className="mr-1.5 h-3.5 w-3.5" /> Compliance</TabsTrigger>
           <TabsTrigger value="notes"><StickyNote className="mr-1.5 h-3.5 w-3.5" /> Notes</TabsTrigger>
@@ -355,6 +357,11 @@ export default function Customer360Page({ params }: { params: Promise<{ id: stri
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Billing Tab */}
+        <TabsContent value="billing">
+          <BillingTab customerId={id} />
         </TabsContent>
 
         {/* Files Tab */}

@@ -10,6 +10,11 @@ class Settings(BaseSettings):
     graph_tenant_id: str = ""
     graph_client_id: str = ""
     graph_client_secret: str = ""
+    qbo_enabled: bool = False
+    qbo_client_id: str = ""
+    qbo_client_secret: str = ""
+    qbo_redirect_uri: str = "http://localhost:8000/integrations/qbo/callback"
+    qbo_environment: str = "sandbox"
 
     class Config:
         env_file = ".env"
