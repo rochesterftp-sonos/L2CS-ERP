@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/customers", tags=["billing"])
 
 # --- QBO Mapping CRUD ---
 
-@router.get("/{customer_id}/qbo-mapping", response_model=QBOMappingResponse | None)
+@router.get("/{customer_id}/qbo-mapping", response_model=Optional[QBOMappingResponse])
 async def get_qbo_mapping_route(
     customer_id: UUID,
     db: Annotated[AsyncSession, Depends(get_db)],

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import auth, billing, customers, tickets, ingestion, integrations, lookups, users
+from app.routes import auth, billing, customers, dashboard, tickets, ingestion, integrations, lookups, users
 
 app = FastAPI(title="L2CS ERP", version="0.1.0")
 
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(dashboard.router)
 app.include_router(customers.router)
 app.include_router(billing.router)
 app.include_router(tickets.router)

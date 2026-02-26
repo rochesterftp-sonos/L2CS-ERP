@@ -58,10 +58,20 @@ async def create_customer(db: AsyncSession, data: CustomerCreate) -> dict:
         text("""
             INSERT INTO customers (id, name, primary_domain, engagement_manager_id,
                 risk_status, cmmc_status, contract_start, contract_end,
-                sharepoint_url, grc_url, vault_url, notes)
+                sharepoint_url, grc_url, vault_url, notes,
+                industry, employee_count, phone, website,
+                address, city, state, zip,
+                founded_year, linkedin_url, short_description,
+                annual_revenue, contract_value,
+                service_tier, engagement_phase, onboarding_date)
             VALUES (:id, :name, :primary_domain, :engagement_manager_id,
                 :risk_status, :cmmc_status, :contract_start, :contract_end,
-                :sharepoint_url, :grc_url, :vault_url, :notes)
+                :sharepoint_url, :grc_url, :vault_url, :notes,
+                :industry, :employee_count, :phone, :website,
+                :address, :city, :state, :zip,
+                :founded_year, :linkedin_url, :short_description,
+                :annual_revenue, :contract_value,
+                :service_tier, :engagement_phase, :onboarding_date)
         """),
         {
             "id": str(cid),
@@ -76,6 +86,22 @@ async def create_customer(db: AsyncSession, data: CustomerCreate) -> dict:
             "grc_url": data.grc_url,
             "vault_url": data.vault_url,
             "notes": data.notes,
+            "industry": data.industry,
+            "employee_count": data.employee_count,
+            "phone": data.phone,
+            "website": data.website,
+            "address": data.address,
+            "city": data.city,
+            "state": data.state,
+            "zip": data.zip,
+            "founded_year": data.founded_year,
+            "linkedin_url": data.linkedin_url,
+            "short_description": data.short_description,
+            "annual_revenue": data.annual_revenue,
+            "contract_value": data.contract_value,
+            "service_tier": data.service_tier,
+            "engagement_phase": data.engagement_phase,
+            "onboarding_date": data.onboarding_date,
         },
     )
     # Auto-create primary domain if provided

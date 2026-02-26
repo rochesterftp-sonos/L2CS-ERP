@@ -9,6 +9,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.auth import TokenData, require_internal_user
 from app.core.database import get_db
 from app.schemas.customers import (
+    ContactCreate,
+    ContactResponse,
+    ContactUpdate,
     CustomerCreate,
     CustomerResponse,
     CustomerUpdate,
@@ -18,8 +21,11 @@ from app.schemas.customers import (
     MailboxMappingResponse,
     MailboxMappingUpdate,
 )
+from app.schemas.dashboard import CustomerHealthResponse
+from app.services import contacts as contacts_svc
 from app.services import customers as svc
 from app.services.activities import list_activities
+from app.services.dashboard import get_customer_health
 from app.services.tickets import list_tickets
 from app.services.o365.provider import get_email_provider
 
@@ -193,3 +199,67 @@ async def list_customer_emails(
 
     all_emails.sort(key=lambda e: e["received_at"], reverse=True)
     return all_emails[:50]
+
+
+# --- Customer Health ---
+
+@router.get("/{customer_id}/health", response_model=CustomerHealthResponse)
+async def customer_health_route(
+    customer_id: UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[TokenData, Depends(require_internal_user)],
+):
+    customer = await svc.get_customer(db, customer_id)
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return await get_customer_health(db, customer_id)
+
+
+# --- Contacts ---
+
+@router.get("/{customer_id}/contacts", response_model=list[ContactResponse])
+async def list_contacts_route(
+    customer_id: UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[TokenData, Depends(require_internal_user)],
+):
+    return await contacts_svc.list_contacts(db, customer_id)
+
+
+@router.post("/{customer_id}/contacts", response_model=ContactResponse, status_code=201)
+async def create_contact_route(
+    customer_id: UUID,
+    body: ContactCreate,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[TokenData, Depends(require_internal_user)],
+):
+    customer = await svc.get_customer(db, customer_id)
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return await contacts_svc.create_contact(db, customer_id, body)
+
+
+@router.patch("/{customer_id}/contacts/{contact_id}", response_model=ContactResponse)
+async def update_contact_route(
+    customer_id: UUID,
+    contact_id: UUID,
+    body: ContactUpdate,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[TokenData, Depends(require_internal_user)],
+):
+    contact = await contacts_svc.update_contact(db, customer_id, contact_id, body)
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    return contact
+
+
+@router.delete("/{customer_id}/contacts/{contact_id}", status_code=204)
+async def delete_contact_route(
+    customer_id: UUID,
+    contact_id: UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[TokenData, Depends(require_internal_user)],
+):
+    deleted = await contacts_svc.delete_contact(db, customer_id, contact_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Contact not found")

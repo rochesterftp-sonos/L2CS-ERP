@@ -75,3 +75,32 @@ export function formatCurrency(amount: number | null | undefined): string {
   if (amount == null) return "$0.00";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
 }
+
+export const serviceTierColors: Record<string, string> = {
+  bronze: "bg-orange-100 text-orange-800",
+  silver: "bg-gray-100 text-gray-700",
+  gold: "bg-yellow-100 text-yellow-800",
+  platinum: "bg-purple-100 text-purple-800",
+};
+
+export const engagementPhaseColors: Record<string, string> = {
+  prospect: "bg-slate-100 text-slate-700",
+  onboarding: "bg-blue-100 text-blue-700",
+  active: "bg-emerald-100 text-emerald-700",
+  renewal: "bg-amber-100 text-amber-700",
+  offboarding: "bg-red-100 text-red-700",
+};
+
+export function healthScoreColor(score: number): string {
+  if (score >= 80) return "text-emerald-600";
+  if (score >= 60) return "text-yellow-600";
+  if (score >= 40) return "text-orange-600";
+  return "text-red-600";
+}
+
+export function healthScoreBg(score: number): string {
+  if (score >= 80) return "bg-emerald-500";
+  if (score >= 60) return "bg-yellow-500";
+  if (score >= 40) return "bg-orange-500";
+  return "bg-red-500";
+}

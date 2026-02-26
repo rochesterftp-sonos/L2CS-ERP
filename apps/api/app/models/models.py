@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, Text, text
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, Numeric, Text, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -40,6 +40,39 @@ class Customer(Base):
     grc_url: Mapped[str | None] = mapped_column(Text)
     vault_url: Mapped[str | None] = mapped_column(Text)
     notes: Mapped[str | None] = mapped_column(Text)
+    # Phase 3 expansion
+    industry: Mapped[str | None] = mapped_column(Text)
+    employee_count: Mapped[int | None] = mapped_column(Integer)
+    phone: Mapped[str | None] = mapped_column(Text)
+    website: Mapped[str | None] = mapped_column(Text)
+    address: Mapped[str | None] = mapped_column(Text)
+    city: Mapped[str | None] = mapped_column(Text)
+    state: Mapped[str | None] = mapped_column(Text)
+    zip: Mapped[str | None] = mapped_column(Text)
+    founded_year: Mapped[int | None] = mapped_column(Integer)
+    linkedin_url: Mapped[str | None] = mapped_column(Text)
+    short_description: Mapped[str | None] = mapped_column(Text)
+    annual_revenue: Mapped[float | None] = mapped_column(Numeric(15, 2))
+    contract_value: Mapped[float | None] = mapped_column(Numeric(15, 2))
+    service_tier: Mapped[str] = mapped_column(Text, nullable=False, server_default="bronze")
+    engagement_phase: Mapped[str] = mapped_column(Text, nullable=False, server_default="onboarding")
+    onboarding_date: Mapped[date | None] = mapped_column(Date)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=text("now()"))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=text("now()"))
+
+
+class Contact(Base):
+    __tablename__ = "contacts"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    customer_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("customers.id", ondelete="CASCADE"))
+    first_name: Mapped[str] = mapped_column(Text, nullable=False)
+    last_name: Mapped[str] = mapped_column(Text, nullable=False)
+    email: Mapped[str | None] = mapped_column(Text)
+    phone: Mapped[str | None] = mapped_column(Text)
+    title: Mapped[str | None] = mapped_column(Text)
+    is_primary: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=text("now()"))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=text("now()"))

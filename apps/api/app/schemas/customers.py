@@ -19,6 +19,23 @@ class CustomerCreate(BaseModel):
     grc_url: str | None = None
     vault_url: str | None = None
     notes: str | None = None
+    # Phase 3 expansion
+    industry: str | None = None
+    employee_count: int | None = None
+    phone: str | None = None
+    website: str | None = None
+    address: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zip: str | None = None
+    founded_year: int | None = None
+    linkedin_url: str | None = None
+    short_description: str | None = None
+    annual_revenue: float | None = None
+    contract_value: float | None = None
+    service_tier: str = "bronze"
+    engagement_phase: str = "onboarding"
+    onboarding_date: date | None = None
 
 
 class CustomerUpdate(BaseModel):
@@ -33,6 +50,23 @@ class CustomerUpdate(BaseModel):
     grc_url: str | None = None
     vault_url: str | None = None
     notes: str | None = None
+    # Phase 3 expansion
+    industry: str | None = None
+    employee_count: int | None = None
+    phone: str | None = None
+    website: str | None = None
+    address: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zip: str | None = None
+    founded_year: int | None = None
+    linkedin_url: str | None = None
+    short_description: str | None = None
+    annual_revenue: float | None = None
+    contract_value: float | None = None
+    service_tier: str | None = None
+    engagement_phase: str | None = None
+    onboarding_date: date | None = None
 
 
 class CustomerResponse(BaseModel):
@@ -48,6 +82,23 @@ class CustomerResponse(BaseModel):
     grc_url: str | None
     vault_url: str | None
     notes: str | None
+    # Phase 3 expansion
+    industry: str | None = None
+    employee_count: int | None = None
+    phone: str | None = None
+    website: str | None = None
+    address: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zip: str | None = None
+    founded_year: int | None = None
+    linkedin_url: str | None = None
+    short_description: str | None = None
+    annual_revenue: float | None = None
+    contract_value: float | None = None
+    service_tier: str = "bronze"
+    engagement_phase: str = "onboarding"
+    onboarding_date: date | None = None
     is_active: bool
     created_at: datetime
     updated_at: datetime
@@ -90,5 +141,39 @@ class MailboxMappingResponse(BaseModel):
     folder_path: str
     include_subfolders: bool
     is_primary: bool
+    created_at: datetime
+    updated_at: datetime
+
+
+# --- Contacts ---
+
+class ContactCreate(BaseModel):
+    first_name: str
+    last_name: str
+    email: str | None = None
+    phone: str | None = None
+    title: str | None = None
+    is_primary: bool = False
+
+
+class ContactUpdate(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    title: str | None = None
+    is_primary: bool | None = None
+
+
+class ContactResponse(BaseModel):
+    id: UUID
+    customer_id: UUID
+    first_name: str
+    last_name: str
+    email: str | None
+    phone: str | None
+    title: str | None
+    is_primary: bool
+    is_active: bool
     created_at: datetime
     updated_at: datetime
